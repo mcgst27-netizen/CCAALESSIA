@@ -1,0 +1,378 @@
+import { doc, writeBatch } from 'firebase/firestore';
+import { db } from './firebase';
+import type {
+  AppConfig,
+  CategoryDoc,
+  OptionDoc,
+  PredicateDoc,
+  SubjectDoc,
+} from '../types/caa';
+
+export async function seedInitialData(): Promise<void> {
+  if (!db) {
+    throw new Error('Firebase no está configurado. Configura tu archivo .env primero.');
+  }
+
+  const categories: CategoryDoc[] = [
+    {
+      id: 'cat_animales',
+      name: 'Animales',
+      emojiFallback: '🦁',
+      fitzgeraldColor: 'orange',
+      imageMediaId: null,
+      audioMediaId: null,
+      order: 1,
+      active: true,
+    },
+    {
+      id: 'cat_familia',
+      name: 'Familia',
+      emojiFallback: '👨‍👩‍👧',
+      fitzgeraldColor: 'yellow',
+      imageMediaId: null,
+      audioMediaId: null,
+      order: 2,
+      active: true,
+    },
+  ];
+
+  const predicates: PredicateDoc[] = [
+    {
+      id: 'pred_come',
+      label: 'come',
+      questionPrompt: '¿Qué come?',
+      optionType: 'food',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🍽️',
+      imageMediaId: null,
+      audioMediaId: null,
+      order: 1,
+    },
+    {
+      id: 'pred_color',
+      label: 'es de color',
+      questionPrompt: '¿De qué color es?',
+      optionType: 'color',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🎨',
+      imageMediaId: null,
+      audioMediaId: null,
+      order: 2,
+    },
+    {
+      id: 'pred_vive',
+      label: 'vive en',
+      questionPrompt: '¿Dónde vive?',
+      optionType: 'habitat',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🌍',
+      imageMediaId: null,
+      audioMediaId: null,
+      order: 3,
+    },
+    {
+      id: 'pred_hace',
+      label: 'hace',
+      questionPrompt: '¿Cómo hace?',
+      optionType: 'sound',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🔊',
+      imageMediaId: null,
+      audioMediaId: null,
+      order: 4,
+    },
+  ];
+
+  const options: OptionDoc[] = [
+    // Comidas
+    {
+      id: 'opt_carne',
+      label: 'carne',
+      spokenLabel: 'carne',
+      optionType: 'food',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🥩',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_pasto',
+      label: 'pasto',
+      spokenLabel: 'pasto',
+      optionType: 'food',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🌿',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_platano',
+      label: 'plátano',
+      spokenLabel: 'plátano',
+      optionType: 'food',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🍌',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_pan',
+      label: 'pan',
+      spokenLabel: 'pan',
+      optionType: 'food',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🍞',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_manzana',
+      label: 'manzana',
+      spokenLabel: 'manzana',
+      optionType: 'food',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🍎',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+
+    // Colores
+    {
+      id: 'opt_amarillo',
+      label: 'amarillo',
+      spokenLabel: 'amarillo',
+      optionType: 'color',
+      fitzgeraldColor: 'blue',
+      emojiFallback: '🟡',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_blanco_negro',
+      label: 'blanco y negro',
+      spokenLabel: 'blanco y negro',
+      optionType: 'color',
+      fitzgeraldColor: 'blue',
+      emojiFallback: '🦓',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_marron',
+      label: 'marrón',
+      spokenLabel: 'marrón',
+      optionType: 'color',
+      fitzgeraldColor: 'blue',
+      emojiFallback: '🟤',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_azul',
+      label: 'azul',
+      spokenLabel: 'azul',
+      optionType: 'color',
+      fitzgeraldColor: 'blue',
+      emojiFallback: '🔵',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+
+    // Hábitats (con spokenLabel para concordancia natural: "vive en la selva")
+    {
+      id: 'opt_sabana',
+      label: 'sabana',
+      spokenLabel: 'la sabana',
+      optionType: 'habitat',
+      fitzgeraldColor: 'purple',
+      emojiFallback: '🌾',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_selva',
+      label: 'selva',
+      spokenLabel: 'la selva',
+      optionType: 'habitat',
+      fitzgeraldColor: 'purple',
+      emojiFallback: '🌴',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_casa',
+      label: 'casa',
+      spokenLabel: 'la casa',
+      optionType: 'habitat',
+      fitzgeraldColor: 'purple',
+      emojiFallback: '🏠',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_mar',
+      label: 'mar',
+      spokenLabel: 'el mar',
+      optionType: 'habitat',
+      fitzgeraldColor: 'purple',
+      emojiFallback: '🌊',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+
+    // Sonidos
+    {
+      id: 'opt_sonido_leon',
+      label: 'grrr',
+      spokenLabel: 'grrr',
+      optionType: 'sound',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🗣️',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_sonido_cebra',
+      label: 'hiii',
+      spokenLabel: 'hiii',
+      optionType: 'sound',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🎵',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_sonido_mono',
+      label: 'u-u-a-a',
+      spokenLabel: 'u u a a',
+      optionType: 'sound',
+      fitzgeraldColor: 'green',
+      emojiFallback: '🎶',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+    {
+      id: 'opt_sonido_risa',
+      label: 'ja ja ja',
+      spokenLabel: 'ja ja ja',
+      optionType: 'sound',
+      fitzgeraldColor: 'green',
+      emojiFallback: '😄',
+      imageMediaId: null,
+      audioMediaId: null,
+    },
+  ];
+
+  const subjects: SubjectDoc[] = [
+    {
+      id: 'subj_leon',
+      categoryId: 'cat_animales',
+      article: 'El',
+      name: 'león',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🦁',
+      imageMediaId: null,
+      audioMediaId: null,
+      soundEffectMediaId: null,
+      order: 1,
+      active: true,
+      relations: {
+        pred_come: { targetOptionIds: ['opt_carne'] },
+        pred_color: { targetOptionIds: ['opt_amarillo'] },
+        pred_vive: { targetOptionIds: ['opt_sabana'] },
+        pred_hace: { targetOptionIds: ['opt_sonido_leon'] },
+      },
+    },
+    {
+      id: 'subj_cebra',
+      categoryId: 'cat_animales',
+      article: 'La',
+      name: 'cebra',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🦓',
+      imageMediaId: null,
+      audioMediaId: null,
+      soundEffectMediaId: null,
+      order: 2,
+      active: true,
+      relations: {
+        pred_come: { targetOptionIds: ['opt_pasto'] },
+        pred_color: { targetOptionIds: ['opt_blanco_negro'] },
+        pred_vive: { targetOptionIds: ['opt_sabana'] },
+        pred_hace: { targetOptionIds: ['opt_sonido_cebra'] },
+      },
+    },
+    {
+      id: 'subj_mono',
+      categoryId: 'cat_animales',
+      article: 'El',
+      name: 'mono',
+      fitzgeraldColor: 'orange',
+      emojiFallback: '🐒',
+      imageMediaId: null,
+      audioMediaId: null,
+      soundEffectMediaId: null,
+      order: 3,
+      active: true,
+      relations: {
+        pred_come: { targetOptionIds: ['opt_platano'] },
+        pred_color: { targetOptionIds: ['opt_marron'] },
+        pred_vive: { targetOptionIds: ['opt_selva'] },
+        pred_hace: { targetOptionIds: ['opt_sonido_mono'] },
+      },
+    },
+    {
+      id: 'subj_papa',
+      categoryId: 'cat_familia',
+      article: '',
+      name: 'Papá',
+      fitzgeraldColor: 'yellow',
+      emojiFallback: '👨',
+      imageMediaId: null,
+      audioMediaId: null,
+      soundEffectMediaId: null,
+      order: 1,
+      active: true,
+      relations: {
+        pred_come: { targetOptionIds: ['opt_pan', 'opt_manzana'] },
+        pred_vive: { targetOptionIds: ['opt_casa'] },
+        pred_hace: { targetOptionIds: ['opt_sonido_risa'] },
+      },
+    },
+    {
+      id: 'subj_mama',
+      categoryId: 'cat_familia',
+      article: '',
+      name: 'Mamá',
+      fitzgeraldColor: 'yellow',
+      emojiFallback: '👩',
+      imageMediaId: null,
+      audioMediaId: null,
+      soundEffectMediaId: null,
+      order: 2,
+      active: true,
+      relations: {
+        pred_come: { targetOptionIds: ['opt_manzana', 'opt_pan'] },
+        pred_vive: { targetOptionIds: ['opt_casa'] },
+        pred_hace: { targetOptionIds: ['opt_sonido_risa'] },
+      },
+    },
+  ];
+
+  const config: AppConfig = {
+    visibleCategoryIds: ['cat_animales', 'cat_familia'],
+    showAllPredicatesMode: false,
+    optionsPerRound: 3,
+    visualPromptDimDistractors: false,
+    holdBackButtonInActivity: false,
+  };
+
+  const batch = writeBatch(db);
+  batch.set(doc(db, 'config', 'app'), config, { merge: true });
+  for (const cat of categories) batch.set(doc(db, 'categories', cat.id), cat);
+  for (const pred of predicates) batch.set(doc(db, 'predicates', pred.id), pred);
+  for (const opt of options) batch.set(doc(db, 'options', opt.id), opt);
+  for (const subj of subjects) batch.set(doc(db, 'subjects', subj.id), subj);
+
+  await batch.commit();
+}

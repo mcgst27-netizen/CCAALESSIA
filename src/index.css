@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f8fafc;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Pro Rounded",
+      "Segoe UI",
+      Roboto,
+      sans-serif;
+  }
+}
+
+/* Reglas clínicas táctiles para Modo Juego en iPadOS */
+.caa-game-surface {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
+}
+
+.caa-game-surface img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes caa-gentle-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.caa-speaking-highlight {
+  animation: caa-gentle-pulse 0.7s ease-in-out infinite;
+}
